@@ -16,14 +16,25 @@
 package com.example.androiddevchallenge
 
 import android.os.Bundle
+import android.view.Gravity
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.androiddevchallenge.ui.theme.MyTheme
+import com.example.androiddevchallenge.ui.widget.ClockWidget
+import com.example.androiddevchallenge.ui.widget.TimeClockWidget
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +51,24 @@ class MainActivity : AppCompatActivity() {
 @Composable
 fun MyApp() {
     Surface(color = MaterialTheme.colors.background) {
-        Text(text = "Ready... Set... GO!")
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CircularProgressIndicator(progress = 0.6f, strokeWidth = 20.dp, )
+            Spacer(modifier = Modifier.size(32.dp))
+            ClockWidget()
+            Spacer(modifier = Modifier.size(32.dp))
+            Button(onClick = { /*TODO*/ }) {
+                Text(text = "Start")
+            }
+            Spacer(modifier = Modifier.size(16.dp))
+            Button(onClick = { /*TODO*/ }) {
+                Text(text = "Stop")
+            }
+        }
     }
 }
 
