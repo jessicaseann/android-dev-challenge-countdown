@@ -1,15 +1,15 @@
 package com.example.androiddevchallenge.ui.widget
 
-import android.os.CountDownTimer
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.absoluteOffset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -25,7 +25,6 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flow
-import kotlin.math.min
 
 @Composable
 fun ClockWidget(state: State, onFinish: () -> Unit) {
@@ -33,13 +32,26 @@ fun ClockWidget(state: State, onFinish: () -> Unit) {
     var seconds by rememberSaveable { mutableStateOf(0) }
     var isRunning by rememberSaveable { mutableStateOf(false) }
     var timerJob: Job? by rememberSaveable { mutableStateOf(null) }
+    val infiniteTransition = rememberInfiniteTransition()
+    val offset by infiniteTransition.animateFloat(
+        initialValue = -4.0f,
+        targetValue = 4.0f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(100, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
 
+    var shouldAnimate = false
     if (minutes == 0 && seconds == 0) {
         onFinish()
         isRunning = false
+    } else if (minutes == 0 && seconds <= 5 && state == State.START) {
+        shouldAnimate = true
     }
 
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    Row(verticalAlignment = Alignment.CenterVertically,
+    modifier = Modifier.absoluteOffset(x = if (shouldAnimate) offset.dp else 0.dp)) {
         TimeClockWidget(minutes, state) { minutes = it }
         Text(text = ":", modifier = Modifier.padding(8.dp), fontSize = 36.sp)
         TimeClockWidget(seconds, state) { seconds = it }
