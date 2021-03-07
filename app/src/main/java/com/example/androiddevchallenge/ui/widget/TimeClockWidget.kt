@@ -41,18 +41,16 @@ import androidx.compose.ui.unit.sp
 import com.example.androiddevchallenge.R
 import com.example.androiddevchallenge.model.State
 import com.example.androiddevchallenge.ui.utils.NumberUtils
+import com.example.androiddevchallenge.ui.utils.TimerUtils.timer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 
 @Composable
 fun ClockWidget(state: State, onFinish: () -> Unit) {
-    var minutes by rememberSaveable { mutableStateOf(4) }
+    var minutes by rememberSaveable { mutableStateOf(0) }
     var seconds by rememberSaveable { mutableStateOf(0) }
     var isRunning by rememberSaveable { mutableStateOf(false) }
     var timerJob: Job? by rememberSaveable { mutableStateOf(null) }
@@ -97,13 +95,6 @@ fun ClockWidget(state: State, onFinish: () -> Unit) {
         minutes = 0
         seconds = 0
         isRunning = false
-    }
-}
-
-fun timer(seconds: Int): Flow<Int> = flow {
-    for (s in (seconds - 1) downTo 0) {
-        delay(1000L)
-        emit(s)
     }
 }
 
